@@ -1,0 +1,8 @@
+.pos 0
+	rmmovl	%eax, 0x54		# view memory around target
+	irmovl	$0x000000FF, %ebx
+	mrmovl	$target,%eax
+	andl	%ebx,%eax
+
+.pos 0x50
+	target: .long 0x12345678	# example value at 0x50

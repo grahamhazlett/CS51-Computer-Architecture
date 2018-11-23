@@ -1,0 +1,137 @@
+Graham Hazlett
+HW #7
+
+
+1.
+[Postponed to next assignment]
+
+
+2.
+
+
+A. The assembly command at 80483e1:
+80483e1:	movl $0xdeadbeef, -0x4(%ebp)
+represents line 12 in the C code, l1 = 0xdeadbeef; This is true because
+the assembly code is clearly moving the int value 0xdeadbeef into
+memory, specifically 4 above the stack base pointer, which is where
+local variables are most often stored. 
+
+B. The assembly command at 80483f6:
+80483f6:	movl %0xfeedface, 0x8(%ebp)
+repreents line 14 in the C code, arg1 = 0xfeedface; This is true because
+the assembly code is moving the same int value 0xfeedface into a memory
+location below the stack base pointer, which is where arguments for
+functions are most often stored; which is what arg1 represents. 
+
+C. First, the if conditional statement is contained in lines 80483fd, and
+8048301: the line 	cmpl	$0x0, -0x8(%ebp), which compares 0 to a
+memory location 8 bytes above the base pointer, which corresponds to 
+the variable l2 in the C code. Then,	jle	804840a jumps to the else
+case, because it is the opposite of l2>0.
+
+This comparison makes sure that if l2>0, the jle command will not jump, so
+the subsequent lines
+8048403:	mov $0xcafef00d, %eax
+8048408:	jmp 804840f
+contain the case for l2>2. Here, $0xcafef00d is moved to %eax, which is
+conventionally the return location; this clearly corresponds to the if
+statement, return 0xcafef00d in C. Also, the code jumps past the next
+mov line at 804840a, which would have moved 0x0 into %eax, which is for
+the else statement.
+
+D. As stated above, the cmpl and jle lines dictate whether or not the code
+jumps as a result of the comparison (l2>0). Since jle 804840a jumps when
+l2<=0, it is the opposite of the if statement, so the code at 804840a is 
+the content of the else statement:
+804840a:	mov $0x0, %eax
+This line clearly moves 0x0 into %eax, which is the body of the else
+command, return 0x0, because %eax is conventionally where return values
+are stored.
+
+E. The lines
+80483e8:	mov    0x804a01c,%edx
+80483ee:	mov    0x8(%ebp),%eax
+80483f1:	add    %edx,%eax
+80483f3:	mov    %eax,-0x8(%ebp)
+appear to correspond to the Mystery command at line 13, because they
+are in between two obvious lines which correspond to lines 12 and 14.
+I think these lines most likely represent the C code:
+l2 = arg1 + g2;
+This seems true because l2 is clearly stored 8 above the base pointer,
+and it is written to at the end, so this is the variable we are
+manipulating. Also, arg1 is definitely in the add instruction because 
+it is stored 8 below the base pointer, where arguments for functions
+usually lie. Then, the addition of g2 is a bit of a postulate, because
+all that is really known is that we are adding arg1, and some other
+thing stored at memory address 0x804a01c. But, this memory address most
+likely corresponds to the memory location of g2, because global
+variables are usually stored in somewhat random locations, accessed by
+one master absolute address, which is what this memory location 
+appears to be.
+
+
+F. Because the x86 command 'leave' performs these actions; it moves the
+%ebp into %esp, and then pops the old value of %ebp back into %ebp. i.e.
+it is already done for us with 'leave'.
+
+
+------------------------------------------------------------------------
+
+3.
+
+Cache	m	C	B	E	S	t	s	b
+
+1.	32	_2048_	8	1	_256_	21	8	3
+
+2.	32	2048	_4_	_4_	128	23	7	2
+
+3.	32	1024	2	8 	64	_25_	_6_	1
+
+4.	32	1024	_32_	2	16	23	4	_5_
+
+
+------------------------------------------------------------------------
+
+4.
+	13	128	4	2	8	8	3	2
+
+
+
+A. 	cache hit on set 1 for addresses:
+
+	0000100100100 - 0000100100111
+	=
+	0x0124 - 0x0127
+
+B.	cache hit on set 6 for addresses:
+
+	1001000111000 - 1001000111011
+	=
+	0x1238 - 0x123b
+
+
+------------------------------------------------------------------------
+
+5.
+
+A.
+11	10	9	8	7	6	5	4	3	2	1	0
+CT	CT	CT	CT	CT	CT	CT	CT	CI	CI	CO	CO
+
+B.
+Read 0x834
+100000110100
+Hit:		miss
+Read Value:	(unknown)
+
+
+Write 0x836
+100000110110
+Hit:		hit
+Read Value:	(N/A)
+
+
+Read 0xFFD
+111111111101
+Hit:		hit
+Read Value:	C0

@@ -1,0 +1,35 @@
+.pos 0x0
+	
+DNotReady: 	mrmovl 0x00FFFE08, %ecx
+		addl %ecx,%ecx
+		je DNotReady # jmps if zero
+
+		irmovl	$0x68, %eax
+		rmmovl	%eax, 0x00FFFE0c 
+		irmovl	$0x65, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x6c, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x6c, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x6f, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x20, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x77, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x6f, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x72, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x6c, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x64, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		irmovl	$0x21, %eax
+		rmmovl	%eax, 0x00FFFE0c
+		
+		
+		
+		
+		

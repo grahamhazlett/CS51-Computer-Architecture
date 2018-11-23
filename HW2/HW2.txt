@@ -1,0 +1,117 @@
+Homework 2:
+
+Q1:
+
+(Here, multiply each hex digit by its representative
+power of 16, and add them all together.)
+
+A. 0xA023
+40995
+
+B. 0x0BED
+3053
+
+C. 0x12EF
+4847
+
+D. 0x2100
+8448
+
+E. 0xC003
+49155
+
+
+Q2:
+
+(Here, do mod operation of each number by four
+powers of 16, and then translate that mod operation
+to a hex digit and concatenate them. For negatives
+translate them to unsigned first.)
+
+A. 257
+0x0101
+
+B. -17,203
+0xBCCD
+
+C. 21,034
+0x522A
+
+D. -916
+0xFC6C
+
+E. 45
+0x002D
+
+
+
+
+
+Q3:
+
+
+For this problem I first realized that for a unsigned
+comparator, I could just look at each of the bits, and
+starting with the most significant bit, if A was greater
+than B, I should return true, if A was less than B I
+should output false, and if A was equal to B then I should
+look at the bit less significant than that one and then 
+repeat. First, I made a one bit comparator with an xor
+going into an and gate. This checked if A's bit was less
+than B's bit; if it was it outputted true. Then, I used a
+xnor gate to see if the two bits were equal. Then, I made
+a copy of these for each of the bits inputted. Finally, I
+strung them all together, starting at the output. If the
+most significant bit of A was greater than B, then it should
+return true, so I put it through an or gate, with the other
+input going back to the less significant bit's place, with
+an and gate to check if those bits were equal. If the most
+significant bit was not equal but A < B, then true is never
+outputted. But if these bits are equal, it essentially 
+refers to the less significant bit; if that bit's A > B, then
+it outputs true; if it is less it outputs false; if equal
+it refers to the less significant bit and so on. At the final
+bit true is only passed along if A > B, not if A = B,
+finishing off the 4 bit unsigned less than gate.
+
+
+
+
+
+Q4:
+
+First, to make the NotBCD portion of the problem, I used
+a comparator for each of the 4 data lines, and if they were
+greater than the constant 'a', then they were deemed to be
+not BCD; these were all lumped together and if any input was
+not less than 'a' then NotBCD is true.
+For the SixMult portion of the problem, I used the knowledge
+that if a number is a multiple of both 2 and 3, then it is a
+multiple of 6. First, to check if the number was a multiple
+of 2, I checked the least significant bit of the ones place
+input; if it was high then it was not a multiple of 2. Then,
+to check for a multiple of 3 I used the trick that if all
+the digits of a number are added up, then if that number is
+a multiple of three the original is a multiple of 3. So, I
+added all the digits together, and with each addition I
+added a new bit to the sum to account for larger numbers
+using splitters. Then, with this sum, I used a binary decoder
+to take the 5 least significant bits of the sum, and
+manually look for multiples of 3 which were then all combined
+together with one or gate. Then, the two extra cases of
+digit sums which were possible but expressed in more than 5
+bits (33 and 36) were parsed out with an and gate reading the
+most significant bits and some gates looking for 1 and 4 on
+the decoder. (I used this approach because logisim has no 6
+bit decoder) Then, I anded this output together with the
+multiple of 2 portion, and anded this output with the BCD
+checker (to make sure the input was already a BCD) to complete
+the logic.
+
+I tested this design with many multiples of 3, including the
+first few in the set (3,6,9, etc), and then chose some random
+values and checked them using a calculator to see if they were
+multiples. Finally, I checked the largest few multiples of 6
+(9996,9990, etc) to confirm it worked. (In building this, I
+also assumed 0 is not a valid multiple of 6). I also did a 
+few tests for notBCD and found it worked well.

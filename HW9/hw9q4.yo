@@ -1,0 +1,51 @@
+  0x0000:              | .pos 0x0
+  0x0000:e0            | 		.byte	0xe0	#leave_os
+  0x0001:30f430040000  | 		irmovl	$0x430, %esp
+  0x0007:7000030000    | 		jmp	0x300
+                       | 
+  0x0100:              | .pos 0x100
+                       | 		# Perform key fetch
+                       | 		# read KBSR until it's 1
+  0x0100:503f00feff00  | KBNotReady:	mrmovl 0x00FFFE00, %ebx
+  0x0106:6033          | 		addl %ebx,%ebx
+  0x0108:7300010000    | 		je KBNotReady # jmps if zero
+                       | 	
+                       | 		# got a character---get it into %ecx
+  0x010d:500f04feff00  | 		mrmovl  0x00FFFE04, %eax
+  0x0113:e0            | 		.byte	0xe0
+  0x0114:90            | 		ret
+                       | 		
+                       | 
+  0x0200:              | .pos 0x200
+                       | 
+                       | 		# read DSR until it's 1
+  0x0200:501f08feff00  | DNotReady: 	mrmovl 0x00FFFE08, %ecx
+  0x0206:6011          | 		addl %ecx,%ecx
+  0x0208:7300020000    | 		je DNotReady # jmps if zero
+                       | 
+                       | 		
+  0x020d:30f045000000  | 		irmovl	$0x45, %eax
+  0x0213:400f0cfeff00  | 		rmmovl	%eax, 0x00FFFE0c 
+  0x0219:30f072000000  | 		irmovl	$0x72, %eax
+  0x021f:400f0cfeff00  | 		rmmovl	%eax, 0x00FFFE0c
+  0x0225:30f072000000  | 		irmovl	$0x72, %eax
+  0x022b:400f0cfeff00  | 		rmmovl	%eax, 0x00FFFE0c
+  0x0231:30f06f000000  | 		irmovl	$0x6f, %eax
+  0x0237:400f0cfeff00  | 		rmmovl	%eax, 0x00FFFE0c
+  0x023d:30f072000000  | 		irmovl	$0x72, %eax
+  0x0243:400f0cfeff00  | 		rmmovl	%eax, 0x00FFFE0c
+  0x0249:30f021000000  | 		irmovl	$0x21, %eax
+  0x024f:400f0cfeff00  | 		rmmovl	%eax, 0x00FFFE0c
+  0x0255:00            | 		halt
+                       | 
+  0x0300:              | .pos 0x300
+  0x0300:d0            | 		.byte	0xd0	#enter_os
+                       | 
+                       | 		# attempt to read IO w/o priv:
+                       | 		# read KBSR until it's 1
+  0x0301:503f00feff00  | KBNotReady2:	mrmovl 0x00FFFE00, %ebx
+  0x0307:6033          | 		addl %ebx,%ebx
+  0x0309:7301030000    | 		je KBNotReady2 # jmps if zero
+                       | 	
+                       | 		# got a character---get it into %ecx
+  0x030e:500f04feff00  | 		mrmovl  0x00FFFE04, %eax

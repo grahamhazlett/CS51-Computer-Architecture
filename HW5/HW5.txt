@@ -1,0 +1,56 @@
+Graham Hazlett
+2/4/18
+HW5:
+
+
+Q1:
+
+For this question, I started with the original echo.ys, and
+modified it so that it would change the case of alphabetical
+characters when entered. To do this, the code checked if the 
+inputted character is within the bounds of a valid alphabeical
+character, and if it is found to be uppercase, its ASCII value
+is increased by 0x20; if it is found to be lowercase, its ASCII
+value is decreased by 0x20, and if not it is simply outputted
+as is.
+For testing, I stepped through the code while trying multiple
+inputs, including alphabetical characters and non-alphabetical
+ones as well. These tests yielded the correct results, with non
+alphabetical characters remaining unchanged, and alphabetical
+characters' case being swapped.
+
+Q2:
+
+For this question, I made each option (KBDR, KBSR, DDR, DSR)
+addressable by using comparators to constants leading to
+additional logic; the addresses I chose were the ones 
+corresponding to that used in the y86 simulator (0x00fffe00-
+0x00fffe0f). Only four bytes of the sixteen bytes addressable
+are interesting though, so I used a large NOR gate to pipe
+0x00 to the output if the input was a "boring" byte. Also,
+if the 3 most significant bytes were not equal to 0x00fffe, I
+chose to ignore that value by outputting floating values.
+Also, for removing characters from the KBDR, I made it so
+that when the address 0x00fffe04 is selected, and RAM use and
+RAM read are both high, the character is consumed from the
+keyboard, and put into an internal register and outputted
+without being overwritten until one or more of these values
+is toggled off, and then overwritten when all three are
+correct again. This behavior seems to function as expected.
+For testing, I made sure to test all four funcitons, with
+differing characters inputted and outputted. I also tried
+fetching the "boring" bytes, and they each outputted 0x00
+when RAM use, and RAM read are both high. Additionally, I
+tested cases where the most significant 3 bytes were not
+0x00fffe, and each time read was requested floating points
+were outputted, as was desired.
+
+Q3:
+
+For this problem, I used a few multiplexers and multiple
+inputs to create a FSM which outputs states exactly 
+corresponding to the table given for this problem.
+For testing, I tested each select combination, with multiple
+values for icode, valN, Dmemdone, Imemdone, and CurrentState,
+each output made by the FSM appeared to correspond to what
+was desired in the table specifying the problem.

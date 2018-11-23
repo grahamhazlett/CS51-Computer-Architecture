@@ -1,0 +1,62 @@
+Graham Hazlett
+HW6:
+
+Q1:
+For this question I simply copy pasted my previously made components
+into the current skeleton. I believe the testing of them is already
+done because in previous assignemnts they were tested for bugs. 
+Additionally, later testing with code in the machine would show 
+errors in these circuits also.
+
+Q2:
+For this question I first laid down the ROM, RAM, and copied in my
+IOSHIM from the previous homework. I then made sure to wire up the
+different memory modules with a KBbuddy for each, so that they are
+accessed with only the correct addresses. My Inst. memory lives at
+0x000-0x3FF, and my Data memory lives at 0x400-0x7FF. Finally, just
+like is hardcoded into the old assignment, my fake IO memory lives
+at 0x00FFFE00-0x00FFFEF. I made sure to add buffers and gates also
+around these circuits to make sure they did not interfere with each
+other, and that data would only be outputted to the final output
+by only one component. I tested multiple pieces of code, making sure
+that all memory operations (mrmovl, rmmovl, etc) worked properly,
+when writing to IO, Data, and when reading from instruction, data,
+and IO. I also chose to have nothing happen in the strange case one
+chose to try to write to instruction memory. In this way, this 
+microarchitecture is Von-Neumann, except one cannot write to 
+instruction memory (as stipulated by this problem instruction).
+
+Q3:
+
+For this piece, I looked at the small box diagram dictating how the
+different components of the FSM should work together. I already knew
+my microsequencer from the previous homework was correct, so I imported
+that circuit into my current one and confirmed it worked there. Finally,
+I made sure all the correct valves were being triggered by the correct
+bits coming out of the ROM, and made sure to attach the next state
+register to the address selector in the ROM. For testing, I made sure
+the microsequencer responded to icodes, and previous states correctly;
+the majority of the testing of the FSM however occurred in question 4 
+of this problem set, when the ROM was programmed.
+
+Q4:
+For this piece, I looked at the "flowchart" which dictated all the states
+for our FSM provided for us; I assummed each box should be its own
+state, and made sure each got its own. I made sure in this stage to check
+carefully with the flowchart to make sure each of the right valves are
+triggered at the correct time. Also, I uploaded various pieces of code
+to the instruction ROM, once I thought I had a correct construction, and
+kept improving the fsm ROM multiple times to iron out any bugs I had. I
+finally uploaded one piece of code to the instruciton ROM which tested
+each different instruction possible in this microarchitecture, and it 
+functioned as desired. (code is called hw6q4TestCode.ys) I even tested
+reading values from instruction memory and loading them into registers
+and ended up working, showing it has this Von-Neumann functionality. I
+also made sure the circuit functions properly when reset is pushed, clearing
+all the RAM, the next state, and returning the FSM to the 000000 state, etc.
+
+Q5:
+For this part, I wrote hello.ys, which I made sure in the y86 simulator
+properly printed "hello world!" to the console. I then used the yo to hex
+converter, and flashed it onto my instrucion ROM, and watched as it spelled
+out "hello world!" on the console in logisim!

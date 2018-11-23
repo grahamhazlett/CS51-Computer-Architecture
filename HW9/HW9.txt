@@ -1,0 +1,92 @@
+Graham Hazlett
+3/4/18
+HW #9
+
+
+1.
+
+For this problem I simply installed a small flip flop in my y86, and added 2 pipes
+to it, privsel, and ldpriv, in addition to a tunnel called Privmode which
+represents the true privmode. When ldpriv is asserted, PrivMode is set to PrivSel
+on the rising edge of the clock.
+
+
+----------------------------------------------------------------------------------
+
+2.
+
+For this problem I added two new commands at the end of my fsm excel ROM. I
+modeled enter_os after call, except this time it sets ldpriv = 1 and privsel = 0
+to switch into priveledged mode. leave_os simply performs the same as a nop, but
+while setting ldpriv = 1 and privsel = 1. Additionally, enter_os asserts a new
+line I added, newpcsel2, which is an extra select bit wired into the newpc select
+mux; this allows the command to assert new pc to be equal to the constant 0x100 at
+a new mux input. This allows the code to jump immidiately to 0x100 and execute a
+system software command. I tested these two commands manually, and they perform as
+expected, as more extensively mentioned in testing for question 4. To accommodate
+for these extra pipes, I added a new ROM device for my FSM next to the 32 bit one,
+which has the same addresses and simply corresponds to the extra bits I have added
+for these pipes (in future problems I add one more pipe). Both of these commands
+are represented by 1 byte, specifically the first nibble being 0xd or 0xe, and the
+second being 0. The hex file of the FSM is thus in two files, one called 
+hw9q4fsm1 and another hw9q4fsm2, for the first 32 bits and the next 3,
+respectively. Also, this command is included in the submission of the fsm
+spreadsheet for question 3.
+
+
+----------------------------------------------------------------------------------
+
+3.
+
+For this problem I added one new command at the end of the fsm ROM, and modeled
+it after enter_os from the previous question; the only difference being the value
+loaded from the newpcsel is the 6th value in the expanded mux, the constant 0x200.
+I made sure that when an exception is thrown, code jumped to 0x200. This was
+achieved by adding an exception input to the useq, and making sure that whenever
+exception = 1, the fsm line 0x3f is called, which corresponds to a jump to 0x200.
+This allows the code to jump to 0x200 and execute a hardware exception. I tested
+this command by asserting the exception line high manually and watching it call
+code at 0x200; this was also tested more thoroughly in question 4.
+
+
+----------------------------------------------------------------------------------
+
+4.
+
+For this problem, I wired up memory mapped IO so that if the address for the IO is
+requested and RAMread is requested while privMode = 1, exception is called and
+code is routed to 0x200. This was achieved by using an and gate for these
+conditions by the IO.
+This code seems to perform exactly as desired. It first sets up the stack,
+successfully sets priviledge to 1, and calls enter_os well. Then, it will wait to
+fetch any valid key, and put it into register %eax before returning to 0x301, the
+next line in user code. Then, when it tries to retrieve the KBSR directly from
+memory mapped IO, it triggers an exception, which successfully routes the code to
+the exception handler code at 0x200, printing "Error!" and halting. For testing,
+I tried out the code multiple times, with a few different characters, and made
+sure each time I could retrieve the character only when I requested the character
+through enter_os, and not by directly accessing memory IO.
+
+
+----------------------------------------------------------------------------------
+
+5.
+
+For this problem, I constructed a MMU out of a couple of RAM units, and some logic
+gates. I took the suggestion to move the page table and control bits of the MMU
+into two separate RAM modules. For the control bits of my RAM, I used the
+convention where if valid = 1, it is a valid bit, if UNPRIV_READ = 1,
+unprivilidged code may read it, and if UNPRIV_WRITE = 1, unprivilidged code may
+write to it. I also used the convention that no matter what, both RAM use input
+and another one of RAM read or RAM write must be high for anything to happen to
+the outputs. Then, if RAM use in and RAM write out are asserted for example, and
+the valid bit for that is zero, trap is asserted and none of the other bits. Also,
+if unpriviledged code attempts to access restricted memory using RAM use and RAM
+read or RAM write, only trap is asserted and none of the other lines.
+I tested this functionality by writing all possible 3 bit values to memory in the
+control bit portion of memory controlling the MMU, and trying each combination of
+RAM use, RAM read, RAM write, and Priviledge, seeing that each time the desired
+effect from this testing is seen correctly.
+
+
+----------------------------------------------------------------------------------

@@ -1,0 +1,57 @@
+Graham Hazlett
+HW #8
+
+
+1.
+
+After editing my code, it now conforms to the example code when I run my
+simulation on the sample cache values; this can be tested by running the
+code and selecting the sample file.
+
+----------------------------------------------------------------------------------
+
+2.
+
+The results of my tests in my simulator are as follows:
+
+2 way set associative:
+6182810 hits, 163268 misses, 6346078 total.
+
+4 way set associative:
+6208266 hits, 137812 misses, 6346078 total.
+
+fully associative:
+6210016 hits, 136062 misses, 6346078 total.
+
+This shows that more hits are attained by increasing associativity, but surely
+these benefits are diminishing, as doubling associativity from 2 way to 4 way
+increased hits by almost 300000, but increasing from 4 way to fully associative
+(64 way) only increased hits by about 20000. This fits with conventional wisdom,
+and previous graphs we have observed comparing associativity and thoroughputs.
+
+----------------------------------------------------------------------------------
+
+3.
+
+OPLI works by piping valC, and rB directly into the ALU, and writing the modified
+value back into rB. In doing so, I did not need to modify the microarchitecture,
+but I did need to modify the FSM rom to accomidate a new command at address 0x3c.
+(for this reason it revised microarchitecture is not included in the submission)
+
+The format of the assembled bytecode is described in the revised fig 4.2 included.
+Additionally, the FSM information is included in the spreadsheet and hex files
+
+I ended up testing the new instruction by executing all of the possible OPLI
+commands, (addli, subli, andli, xorli), and confirming that they all worked. After
+testing all of these, I did determine that the values were modified correctly,
+and I knew that the new OPLI command I wrote works correctly. To write these 
+commands in, I used .byte instructions.
+
+----------------------------------------------------------------------------------
+
+
+4. 
+
+[Annotations PDF file.]
+
+----------------------------------------------------------------------------------

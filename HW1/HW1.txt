@@ -1,0 +1,25 @@
+Question 1:
+
+I have found that the output of this circuit is true when
+only three of the four inputs are true, by individually
+changing the inputs to represent the 16 combinations 
+possible for input for this circuit. My thinking in
+solving this problem was to put three xor gates together
+so they outputted true if an odd number of gates were
+positive, and then make a separate part which determined
+if less than two inputs were powered so that the case of
+one input high could be filtered out, and put an and gate
+between these two parts so that the output was only high
+when three inputs were high, which seems to have worked.
+
+
+Question 2:
+
+After testing all 4 combinations of inputs after creating
+the XOR subcircuit, it seems to perform as expected. My
+thinking was to make a set of two transistors for every
+combination of inputs, and have them output either a high
+or low voltage only when the correct input is put in, and
+then string their outputs together to get one functional
+circuit, which seems to have worked to produce a
+functioning XOR gate.

@@ -1,0 +1,87 @@
+HW3:
+
+
+
+Q1:
+
+In this problem I laid out 4 8 bit registers in a 4 x 4 grid, and
+put a 4 bit decoder after the address input. I routed each 
+appropriate output of the decoder to the enable pin of the
+appropriate register. Then, each output of the registers was
+routed into a multiplexer, whos input was routed to the address.
+Finally, each clock pin was routed to the main clock input.
+For testing, I tested writing various bits to each individual
+register, and each of them accepted a value when their address
+was requested. Additionally, after writing, each register could
+easily be read through the multiplexer if the address is requested.
+
+Q2:
+
+For this problem, I simply used two equality checkers to see if
+the most significant nibble of the 8 bit address was equal to Y.
+I tested many addresses, and each one I tested where the most
+significant nibble was not equal to Y did not write to any
+address in the RAM module; also the read output was left floating
+when the most significant nibble did not equal Y.
+
+Q3:
+
+For this question I started with regwriter, and first thought to
+take valE and valM, and put them into the front of two 8 output
+demultiplexers. The inputs were connected to dstE and dstM. From
+there, I took the values for reqE and reqM, and attached them into
+two 1 bit wide demultiplexers with 8 outputs, one for each output
+register. The select was controlled by dstE and dstM; each output
+from the demultiplexer was routed to the appropriate output
+register and attached together with an xor gate, whose output was
+routed to the enable pin for the respective register. From
+there, I attached each of the outputs from each corresponding 
+spot on the demultiplexer into a 4 input multiplexer, where the
+inputs were reqE and reqM; input 0 was left floating so if
+neither reqE nor reqM were selected, the output would remain
+floating. Input 1 was attached to the demultiplexer from valE
+for the corresponding output; input 2 was attached to the 
+demultiplexer from valM for the corresponding output. I left
+input 3 floating to deal with the base case of dstE = dstM.
+This system allows two different values to be written to up to 
+two registers.
+For the edge case of dstE = dstM, I chose the convention that if
+this case is true, and reqE = reqM, then no value is written to
+any memory address. However, if only one of reqE or reqM are high,
+then even if dstE = dstM, the appropriate output is written to
+memory.
+Then for regreader, to read two values simultaneously I simply
+fed each input Q from the registers into two 8 input multiplexers,
+one for each value (valA & valB). The select bits of the
+multiplexers were wired to srcA and srcB. Then, for the clear
+function, I attached the reset pin to each of the CLR pins for each
+register.
+For testing, I inputted random inputs for valE and valM, testing 
+different destination addresses for E and M, sometimes leaving reqE
+on, reqM on, or both on; the circuit demonstrated writing to two
+different registers with 1 clock tick. Also, the desired output
+described above for dstE = dstM was tested, and works as desired.
+Also, I was able to read from each register using regreader, and was
+able to reset every register at any time using clr.
+
+Q4:
+
+For this question, I laid out logic components for the 4 operations
+supported (addl, subl, andl, xorl) which were an adder, subtractor,
+32 bit and gate, and a 32 bit xor gate. Then, these results were
+multiplexed into the output of the ALU, so that one may choose
+which operation they want to perform.
+For control codes, first for Z I placed an equality checker, setting
+one input as aluE, and the other input as a constant 00000000. Next,
+to check if there was an aritmetic error during adding or
+subtracting, I placed a 1 bit wide multiplexer, and attached the
+carry out pins of the adder into input 00, and the carry out pin of
+the subtractor into input 01; 10 and 11 are hardwired to ground b/c
+it is impossible to have an arithmetic error when checking and or
+xor.
+For texting, I tested each operation, with a variety of cases,
+including ones where the inputs were distinct, where they were
+equal, where the sum should equal zero, where there should be a sum
+or difference arithmetic error (overflow), or where the result
+would be negative for twos complement. For these test cases each
+one appeared to work correctly.

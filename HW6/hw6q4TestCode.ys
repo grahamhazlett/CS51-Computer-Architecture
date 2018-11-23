@@ -1,0 +1,24 @@
+.pos 0x0
+	
+	
+	irmovl	$0x430, %esp
+	call	TestSub
+	nop
+	xorl	%ebx, %ebx
+	je	HaltSub
+
+TestSub:
+	pushl	%eax
+	irmovl	$0x30, %ecx
+	irmovl	$0x400, %eax
+	rmmovl	%ecx, (%eax)
+	rrmovl	%eax, %ebx
+	addl	%ecx, %eax
+	mrmovl	(%ebx), %eax
+	popl	%eax
+	ret
+
+HaltSub:
+	nop
+	halt
+

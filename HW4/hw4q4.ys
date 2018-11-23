@@ -1,0 +1,107 @@
+	.pos 0
+init:
+	# view input and output in memory
+	rmmovl	%eax, output
+	irmovl Stack, %esp
+	irmovl Stack, %ebp
+	call Main
+	halt
+Main:
+	# check if non-bcd
+	irmovl $input, %ebx
+	mrmovl (%ebx), %eax
+	call getbyte
+	irmovl $9, %ecx
+	subl %eax,%ecx
+	jl nonbcd
+	mrmovl 1(%ebx), %eax
+	call getbyte
+	irmovl $9, %ecx
+	subl %eax,%ecx
+	jl nonbcd
+	mrmovl 2(%ebx), %eax
+	call getbyte
+	irmovl $9, %ecx
+	subl %eax,%ecx
+	jl nonbcd
+	mrmovl 3(%ebx), %eax
+	call getbyte
+	irmovl $9, %ecx
+	subl %eax,%ecx
+	jl nonbcd
+
+	# now that all bytes are determined to be bcd, check div by 6:
+	#check div by 2:
+	mrmovl	(%ebx), %eax
+	irmovl	$1, %ecx
+	andl	%ecx, %eax
+	subl	%ecx, %eax
+	je	nonsix
+
+	# if passes, check div by 3:
+	# add all digits together:
+	mrmovl	(%ebx), %eax
+	call	getbyte
+	rrmovl	%eax,%ecx
+	mrmovl	1(%ebx), %eax
+	call	getbyte
+	addl	%eax,%ecx
+	mrmovl 	2(%ebx), %eax
+	call	getbyte
+	addl	%eax,%ecx
+	mrmovl	3(%ebx), %eax
+	call	getbyte
+	addl	%eax,%ecx
+	# check the sum of all digits is equal to some multiple of 3, which is less than 36 (9+9+9+9, the maximum valid sum of digits)
+	irmovl	$0, %eax
+loop:	
+	irmovl	$3, %edx
+	addl	%edx, %eax
+	rrmovl	%ecx, %edx
+	subl	%eax, %edx
+	je	issix
+	irmovl	$36, %edx
+	subl	%eax, %edx
+	je	end
+	jmp	loop
+end:
+	jmp	nonsix
+	ret
+
+nonbcd:	irmovl	$0xe, %edx
+	rmmovl	%edx, output
+	rrmovl	%ebp, %esp
+	halt
+nonsix:	irmovl	0, %edx
+	rmmovl	%edx, output
+	rrmovl	%ebp, %esp
+	halt
+issix:	irmovl	1, %edx
+	rmmovl	%edx, output
+	rrmovl	%ebp, %esp
+	halt
+
+getbyte: #pass 32 bit word into eax and get least significant byte back
+	pushl %ebx
+	irmovl	$0x000000FF,%ebx
+	andl %ebx,%eax
+	popl %ebx
+	ret
+	
+getbcd:	
+	pushl %ecx
+	pushl %ebx
+	popl %ebx
+	popl %ecx
+
+
+input:
+	.byte 0x06
+	.byte 0x09
+	.byte 0x09
+	.byte 0x09
+output:
+	
+	.pos 0x160
+Stack:
+

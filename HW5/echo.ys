@@ -1,0 +1,54 @@
+# sws, cs51
+
+.pos 0
+		# set up stack
+    		irmovl stack, %esp
+		# touch memory there, so the simulator shows us
+		# those addresses in the memory window
+		mrmovl stack, %edi
+		rmmovl %edi, stack
+
+
+echo: 		call GETC
+		# irmovl 1,%ebx
+		# addl %ebx, %eax
+		call PUTC
+		jmp echo
+
+# subroutine: get a char into %eax
+GETC: 		pushl %ebx  # since we stomp on that
+	
+		# read KBSR until it's 1
+KBNotReady:	mrmovl 0x00FFFE00, %ebx
+		addl %ebx,%ebx
+		je KBNotReady # jmps if zero
+	
+		# got a character---get it into %ecx
+		mrmovl  0x00FFFE04, %eax
+	
+		popl %ebx
+		ret
+		
+# subroutine: send %eax to display
+PUTC:		pushl %ecx
+
+		# read DSR until it's 1
+DNotReady: 	mrmovl 0x00FFFE08, %ecx
+		addl %ecx,%ecx
+		je DNotReady # jmps if zero
+
+		# write the char!
+		rmmovl %eax, 0x00FFFE0C	
+	
+		popl %ecx
+		ret
+	
+	
+
+
+.pos 0x10C
+stack: 
+.long 0xFFFFFFFF # the top of the empty stack
+
+
+	

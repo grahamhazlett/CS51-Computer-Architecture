@@ -1,0 +1,16 @@
+  0x0000:              | .pos 0x0
+                       | 
+  0x0000:30f100000000  | 	irmovl	$0x0, %ecx
+  0x0006:30f010000000  | 	irmovl	$0x10, %eax
+  0x000c:2003          | 	rrmovl	%eax, %ebx
+  0x000e:10            | 	nop
+  0x000f:10            | 	nop
+  0x0010:10            | 	nop
+  0x0011:10            | 	nop
+  0x0012:6131          | 	subl	%ebx, %ecx
+  0x0014:761f000000    | 	jg	extra
+  0x0019:6300          | 	xorl	%eax, %eax
+  0x001b:6333          | 	xorl	%ebx, %ebx
+  0x001d:10            | 	nop
+  0x001e:00            | 	halt
+  0x001f:30f301000000  | extra:	irmovl	$0x1, %ebx

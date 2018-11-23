@@ -1,0 +1,106 @@
+HW4:
+
+
+
+Q1:
+
+For this question, I completed the logic of the circuit
+in accordance with the logical operations dictated on the
+"jump condition" column of the y86 cheatsheet. For the
+edge cases where the second nibble of the instruction was
+not between 0 and 6, I had my circuit always output 0 if
+such an invalid code was put into ifun.
+For testing, I tested each individual combination of ZSO
+for each ifun code from 0 to 6; it seems to check out.
+
+Q2:
+
+0x100:	30F30F000000
+0X106:	2031
+0X108:	
+0X108:	4013FDFFFFFF
+0X10E:	6031
+0x110:	7008010000
+
+or starting from 0x100:
+30F30F00000020314013FDFFFFFF60317008010000
+
+In effect, this program keeps writing multiples of 15
+minus 3 at address 15 in memory over and over again.
+
+Q3:
+
+[see hw4q3.ys for implementation]
+My particular implementation assumes that the routine calling
+this subroutine will deal with this function's use of %ebx.
+
+For testing, I put many different values into the memory location
+target, and each time the least significant byte was left in the
+%eax register when halt is encountered; this showed the
+implementation functions as desired.
+
+Q4:
+
+[see hw4q4.ys for implementation]
+For this program it first tests each byte of input to see if it
+is in proper bcd encoding; if any of them are incorrect it jumps
+to notbcd which writes a 0xe to output. Next, it tests if the
+number encoded is a multiple of 6 by first seeing if the least
+significant bit of the ones digit is 1 or 0; if it is 1 it is 
+odd and not a multiple of 6, so it jumps to notsix and writes
+0 to output and stops. Finally, it determined if it was also
+a multiple of 3 by adding each digit up, and checking if the
+result was a multiple of 3 by counting up (similarly to a for
+loop) by 3s until 36, the highest sum of digits represented by
+four digits (9+9+9+9). If it was found to be a multiple of 3,
+the program jumped to issix, and wrote a 1 to output.
+
+For my implementation of the solution of this problem I
+considered 0 not to be a valid multiple of 6.
+
+For testing, I tested a variety of values of valid bcds,
+starting at 0 and increasing from there to about 10, then
+testing larger numbers (eg 1234), and finally I tested the
+largest possible numbers (eg 9999, 9996), and each case worked
+successfully to show if the number was a multiple of 6
+correctly. I also tested multiple cases where the encoded
+numbers were not valid bcd, and each time the program
+successfully wrote a 0xe to output.
+
+Q5:
+
+This implementation was fairly similar to the circuit
+implementation I mad in HW2.
+Similarly, I made sure that the
+input was bcd by seeing if each digit was less than 0xa, (or
+that 0x9 was not less than the digit). I also tested if the
+number was a multiple of 2 by checking the least significant
+digit of the ones place and seeing if it was 0. Finally, I also
+tested if it was a multiple of 3 by adding each of the digits
+up and seeing if it was a multiple of 3 by comparing it to a 
+number of predefined valid multiples of 3.
+The implementations were different in that in the circuit case,
+the operations all occur simultaneously regardless of any case,
+while in the code implementaion the instructions occur
+sequentially, and when one case is definitively determined (eg
+nonbcd) the evalutaions cease and an output is written. Also
+different, the inputs of the circuit were 4 bit words, while
+the inputs of the code were 8 bit words (so that they could be
+easily addressed and manipulated in the architecture that does
+not support addressing individual nibbles from memory, although
+it could have been done this way). Also, the output of the code
+was one answer, while the circuit yielded a separate answer for
+bcd, and sixmult. And obviously the circuit was made on a
+purpose built circuit that cannot perform any other operations,
+while the code was built on a general purpose machine that
+could perform different operations than this program.
+Overall, they are quite similar in abstract logical implementation
+despite the fact that when looking close to the metal they are
+vastly different.
+
+Q6:
+A.	0x0018
+B.	0xF2B7
+C.	0xFEFD
+D.	0x1BEE
+E.	0XC28E
