@@ -3,7 +3,7 @@
 
 This repository contains my work from a class called CS51 - Computer Architecture at Dartmouth. This course covered various topics in computer architecture, such as digital logic, microcode operations, assembly language programming, input/output operations, caching, and pipelining.
 
-The course involved 9 major homework assignments, and over the course of these problem sets, I completed a microprocessor circuit implementation for the y86 architecture. (more info on y86 can be found [here](https://y86tutoring.wordpress.com/y86-ia/)). These circuits were constructed and simulated in Logisim, a free logical simulator. These homeworks also involved writing assembly code for the microarchitecture, compiling it into hex, uploading it into the program memory, and running the program in the simulated circuit.
+The course involved 9 major homework assignments, and over the course of these problem sets, I completed a microprocessor circuit implementation for the y86 architecture. (more info on y86 can be found [here](https://y86tutoring.wordpress.com/y86-ia/)). These circuits were constructed and simulated in [Logisim](http://www.cburch.com/logisim/), a free logical simulator. These homeworks also involved writing assembly code for the microarchitecture, compiling it into hex, uploading it into the program memory, and running the program in the simulated circuit.
 Other homework assignments involved developing digital circuits, studying analyzing runtime with caching, and studying pipelining.
 
 # y86 Microprocessor Implementation
